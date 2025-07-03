@@ -78,6 +78,25 @@ This makes it ideal for use in ethical surveillance systems.
   - Notification alerts via email or SMS
   - A SaaS dashboard for centralized monitoring
 
+
+## Setup Instructions
+
+### 1. Prepare Known Faces
+- Add images of known shoplifters to the `known_faces/` folder.
+- Images should be clear and contain one face each, named by the person’s identifier (e.g., `john_doe.jpg`).
+
+### 2. Generate Face Encodings
+- Run the `encode_faces.py` script to process the images and create `encodings.pkl`.
+- This pickle file contains the facial encodings and corresponding names used for recognition.
+
+### 3. Install Dependencies
+- Create a Python virtual environment (recommended).
+- Install required packages from `requirements.txt`:
+  ```bash
+  pip install -r requirements.txt
+
+
+
 ## 📌 Why This Project?
 
 This project solves a real-world problem by combining:
