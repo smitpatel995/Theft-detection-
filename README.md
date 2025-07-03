@@ -1,126 +1,88 @@
-# 🛒 Video Theft Detection for Shops
 
-This project implements a **video-based theft detection system** to classify shoplifting behaviour in retail shops using computer vision and deep learning (PyTorch).
+# Face Recognition Theft Detection System
 
----
+## 🛡️ Project Overview
 
-## 📌 Overview
+The **Face Recognition Theft Detection System** is a real-time surveillance application designed to automatically identify and flag known shoplifters using facial recognition technology. It leverages computer vision to scan video feed from a webcam, detect faces, match them against a database of known offenders, and trigger alerts when a match is found.
 
-Retail theft remains a significant challenge globally. This solution automates theft detection from surveillance videos, reducing manual monitoring efforts and enhancing security.
+The system is optimized for environments like retail stores, warehouses, libraries, or any place where monitoring known individuals is crucial. By preloading only the faces of shoplifters into the database, the system ensures **privacy-first recognition**, meaning only flagged individuals are identified — all others remain anonymous.
 
-The notebook:
+## 🎯 Key Features
 
-- Extracts frames from CCTV/shop videos.
-- Preprocesses frames efficiently.
-- Trains a CNN-based classifier to detect shoplifting behaviour.
-- Evaluates performance with detailed metrics.
+### ✅ Real-Time Face Detection
+- Continuously processes live webcam footage.
+- Detects and tracks all visible faces in each video frame.
 
----
+### 🔴 Shoplifter Identification
+- Matches detected faces against a database of **known shoplifters only**.
+- If a match is found, highlights the person with a **red box** and a warning label.
+- All others are ignored — no unnecessary recognition or storage.
 
-## 🚀 Features
+### 🎥 Automatic Video Recording
+- Saves **10 seconds of footage before and after** a shoplifter is detected.
+- Ensures evidence includes full context of the incident.
+- Videos are saved locally in a dedicated folder with a timestamp.
 
-✅ Frame extraction from videos  
-✅ Data preprocessing and augmentation  
-✅ PyTorch-based model for binary classification (shoplifter / non-shoplifter)  
-✅ Evaluation metrics: accuracy, confusion matrix, classification report  
-✅ GPU-compatible training pipeline  
-✅ Modular functions for easy integration into production
+### ⚙️ Customizable Thresholds
+- Adjustable face match sensitivity (confidence threshold).
+- Easy to add or remove shoplifters by updating image files.
 
----
+### 📁 Organized Folder Structure
+- `shoplifters/`: where you store all images of flagged individuals.
+- `theft_footage/`: automatically stores saved video evidence.
+- `encodings.pkl`: file storing facial features for faster recognition.
+- Scripts: to generate encodings and run the main detection system.
 
-## 🛠️ Installation
+## 💡 How It Works (Behind the Scenes)
 
-1. **Clone this repository**
+1. **Encoding Phase**:  
+   The system first processes the images of known shoplifters using a script that converts each face into a 128-dimensional encoding. This encoding is saved to a file so the detection process can run in real time without reprocessing.
 
-```bash
-git clone https://github.com/yourusername/video-theft-detection-for-shops.git
-cd video-theft-detection-for-shops
-```
+2. **Detection Phase**:  
+   When the main detection script runs:
+   - It captures video from a webcam.
+   - Detects all faces and encodes them in real time.
+   - Compares each detected face to the preloaded encodings.
+   - If a match exceeds the confidence threshold, it triggers an event.
 
-2. **Install dependencies**
+3. **Event Handling**:  
+   Upon recognizing a shoplifter:
+   - The system starts recording video footage.
+   - It writes the **10 seconds leading up to the detection** (using a rolling buffer).
+   - Then continues recording for **10 seconds after**.
+   - The video is saved to the local disk for evidence.
 
-```bash
-pip install -r requirements.txt
-```
+## 🔐 Privacy-First Design
 
----
+Unlike general facial recognition systems, this one **only recognizes people who have already been flagged** (e.g., known shoplifters). It does not:
+- Store or track the general public.
+- Upload or transmit any video data to external services.
+- Perform surveillance beyond its defined scope.
 
-## 📦 Requirements
+This makes it ideal for use in ethical surveillance systems.
 
-Here is your `requirements.txt`:
+## 🧰 Use Cases
 
-```
-numpy
-pandas
-matplotlib
-torch
-torchvision
-scikit-learn
-opencv-python
-tqdm
-Pillow
-gdown
-```
+- 🏬 **Retail stores** to flag repeat offenders.
+- 🏗️ **Warehouses** to monitor restricted zones.
+- 📚 **Libraries** for detecting banned individuals.
+- 🏢 **Office spaces** with entry restrictions.
 
----
+## 🔄 Customization Options
 
-## 📂 Dataset Structure
+- Update the **shoplifter list** by adding/removing images.
+- Adjust **face recognition strictness** for higher or lower tolerance.
+- Configure output folder, video format, and duration of saved clips.
+- Extend functionality to include:
+  - Cloud uploads (e.g., Google Drive, AWS S3)
+  - Notification alerts via email or SMS
+  - A SaaS dashboard for centralized monitoring
 
-Organise your dataset as follows:
+## 📌 Why This Project?
 
-```
-data/Shop DataSet/
-├── non shop lifters/
-│   ├── video1.mp4
-│   └── ...
-└── shop lifters/
-    ├── video2.mp4
-    └── ...
-```
+This project solves a real-world problem by combining:
+- The power of AI (face recognition)
+- Real-time video processing
+- A privacy-conscious approach
 
-Ensure class folder names match the `CLASS_NAMES` in the notebook: `["non shop lifters", "shop lifters"]`.
-
----
-
-## 💻 Usage
-
-Run the notebook:
-
-```bash
-jupyter notebook video-theft-detection-for-shops.ipynb
-```
-
-Key functions include:
-
-- **extract_frames(video_path, num_frames=8, target_size=(160, 160))**  
-  Extracts evenly spaced, resized frames from input videos.
-
-- **Model Training**  
-  Defines CNN architecture, loss function, optimizer, and training loop.
-
-- **Evaluation**  
-  Generates classification report and confusion matrix for performance analysis.
-
----
-
-## 🔬 Results
-
-The model is evaluated on:
-
-- **Accuracy Score**
-- **Confusion Matrix**
-- **Classification Report** (Precision, Recall, F1-score)
-
-> *Improve performance by tuning hyperparameters, augmenting data, or using advanced video action recognition models.*
-
----
-
-## 🎯 Future Scope
-
-✅ Real-time CCTV integration using OpenCV streams  
-✅ Action recognition models (e.g. I3D, SlowFast) for temporal behaviour detection  
-✅ Deployment as a REST API with Flask/FastAPI for edge devices  
-✅ Streamlit dashboard for shop owners to monitor predictions
-
----
-
+It’s especially helpful for security teams or small businesses that want to **automate threat detection** using inexpensive hardware like webcams and local machines — no complex infrastructure required.
